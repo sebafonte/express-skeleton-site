@@ -11,16 +11,13 @@ const logger = require('morgan');
 const app = express()
 
 function initializeDatabase() {	
-	userSchema = mongoose.Schema({
-		login: { type: String, trim: true, index: true },
-		password: String,
-		locked: Boolean
-	});
+    userSchema = mongoose.Schema({
+        login: { type: String, trim: true, index: true },
+        password: String,
+        locked: Boolean
+    });
 
-	User = db.model('users', userSchema);	
-
-	//var value = new User({ login: "seba", password: "pepe", locked: false });
-	//value.save(printBDError);
+    User = db.model('users', userSchema);	
 }
 
 function printBDError (err, result) {
@@ -31,6 +28,7 @@ function printBDError (err, result) {
 // Init database
 var userSchema, User;
 const db = mongoose.createConnection('mongodb://localhost/rhdb');
+
 // Init system
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -46,38 +44,32 @@ app.use(session({
 
 initializeDatabase();
 
-//http.globalAgent.maxSockets = 50;
-
 
 // Authentication and Authorization Middleware
-var auth = function(req, res, next) {
-  //if (req.session && req.session.user === "amy" && req.session.admin)
+const auth = function(req, res, next) {
   if (req.session && req.session.user && req.session.admin)  
     return next();
   else
-    //return res.sendStatus(401);
    return res.redirect("/index")
 };
 
+	
 // Index pages
 app.get('/', function (req, res) {
-  res.render('index');
+  res.redirect("/index");
 })
 
 app.get('/index', function (req, res) {
-  res.render('index');
+  if (req.session.username)
+    res.render('home');
+  else
+    res.render('index');
 })
 
 app.get('/users', auth, function (req, res) {
   res.render('users');
 })
 
-app.get('/home', function (req, res) {
-  if (req.session.admin)
-  	res.render('/home');
-  else
-  	res.redirect("/")
-})
 
 // Login endpoint
 app.post('/login', function (req, res) {
@@ -93,7 +85,7 @@ app.post('/login', function (req, res) {
 			if (result != null && (req.body.password == result.password)) {
 				req.session.username = req.body.username;
 				req.session.admin = true;
-				res.send("login success!");
+				res.redirect("/index");
 			}
 			else
 			res.send('login failed');
@@ -103,7 +95,7 @@ app.post('/login', function (req, res) {
 // Logout endpoint
 app.get('/logout', function (req, res) {
   req.session.destroy();
-  res.send("logout success!");
+  res.redirect("/index");
 });
 
 app.listen(3000, function () {
