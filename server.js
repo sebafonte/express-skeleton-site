@@ -50,7 +50,7 @@ const auth = function(req, res, next) {
   if (req.session && req.session.user && req.session.admin)  
     return next();
   else
-   return res.redirect("/index")
+    return res.redirect("/index")
 };
 
 	
@@ -60,10 +60,13 @@ app.get('/', function (req, res) {
 })
 
 app.get('/index', function (req, res) {
+  const message = req.session.errorMessage;
+  req.session.errorMessage = "";
+
   if (req.session.username)
-    res.render('home');
+    res.render('home', { errorMessage: message });
   else
-    res.render('index');
+    res.render('index', { errorMessage: message });
 })
 
 app.get('/users', auth, function (req, res) {
@@ -85,15 +88,19 @@ app.post('/login', function (req, res) {
 			if (result != null && (req.body.password == result.password)) {
 				req.session.username = req.body.username;
 				req.session.admin = true;
+				req.session.errorMessage = "Welcome, " + req.session.username;
 				res.redirect("/index");
 			}
-			else
-			res.send('login failed');
+			else {
+				req.session.errorMessage = "Login failed";		
+				res.redirect("/index");				
+			}
+
 		}); 
 });
  
 // Logout endpoint
-app.get('/logout', function (req, res) {
+app.post('/logout', function (req, res) {
   req.session.destroy();
   res.redirect("/index");
 });

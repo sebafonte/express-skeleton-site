@@ -2,12 +2,20 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>CFO RH home</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <title>CFO RH</title>
+    <link rel="stylesheet" type="text/css" href="public/css/style.css">
   </head>
   <body>
     <div class="container">
-    Home
+	<div>
+	<%= errorMessage %>
+	</div>
+	<br/>	
+	<form action="/logout" method="post">
+	<div style="display: inline-grid">
+	  <input type="submit" class="ghost-button" value="Logout">
+	</div>
+	</form>
     </div>
   </body>
 </html>
