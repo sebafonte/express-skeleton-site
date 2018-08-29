@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>CFO RH</title>
-    <link rel="stylesheet" type="text/css" href="public/css/style.css">
+  <head><% include partials/header %></head>
   </head>
   <body>
     <div class="container">
-	<div>
-	<%= errorMessage %>
-	</div>
+	<% include partials/menu %>
+	<br/><br/><br/><br/><br/>
+	<div><%= errorMessage %></div>
 	<br/>	
 	<form action="/logout" method="post">
 	<div style="display: inline-grid">
-	  <input type="submit" class="ghost-button" value="Logout">
+	
 	</div>
 	</form>
     </div>

@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head><% include partials/header %></head>
+  <head>
+    <meta charset="utf-8">
+    <title>CFO RH</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+  </head>
   <body>
     <div class="container">
     <div class="container">
       <div style="display: inline-grid">
-	<img src="images/cfologo.png" alt="CFO Tech logo">
+	<img src="public/images/cfologo.png" alt="CFO Tech logo">
       </div>
       <fieldset>
         <form action="/login" method="post" enctype='application/json'>
 	<div style="display: inline-grid">
           <input name="username" type="text" class="ghost-input" placeholder="User" required>
-          <input name="password" type="password" class="ghost-input" placeholder="Password" required>
-	  <div style="margin-top: 20px"/>
+          <input name="password" type="text" class="ghost-input" placeholder="Password" required>
 	  <input type="submit" class="ghost-button" value="Login">
 	</div>
 	<%= errorMessage %>
