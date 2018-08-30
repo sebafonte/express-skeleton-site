@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <head>
   <head><% include partials/header %></head>
-  </head>
   <body>
     <div class="container">
 	<% include partials/menu %>
 	<br/><br/><br/><br/><br/>
-	<div><%= errorMessage %></div>
-	<br/>	
-	<form action="/logout" method="post">
-	<div style="display: inline-grid">
-	
-	</div>
-	</form>
+	<div><%= message %></div>
     </div>
+    <% include partials/style %>
   </body>
 </html>

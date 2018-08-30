@@ -5,7 +5,7 @@
     <div class="container">
     <div class="container">
       <div style="display: inline-grid">
-	<img src="images/cfologo.png" alt="CFO Tech logo">
+	<img src="images/cfologo.png" style="margin-left: 50%;" alt="CFO Tech logo">
       </div>
       <fieldset>
         <form action="/login" method="post" enctype='application/json'>
@@ -15,10 +15,11 @@
 	  <div style="margin-top: 20px"/>
 	  <input type="submit" class="ghost-button" value="Login">
 	</div>
-	<%= errorMessage %>
+	<%= message %>
         </form>
       </fieldset>
     </div>
     </div>
+    <% include partials/style %>
   </body>
 </html>

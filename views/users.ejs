@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head><% include partials/header %></head>
-  </head>
   <body>
     <div class="container">
-      <div style="display: inline-grid">
-        Users
+      <% include partials/menu %>
+      <br/><br/><br/><br/><br/>
+      <div style="display: inline-grid; width: 50%">
+      	<h4>Users</h4>
+	<button type="button" class="btn btn-primary" style="width: 100px" >Add new</button>
+
+ 	<div style="display: inline-grid; margin-top: 25px">
+	<% users.forEach(function(result) { %>
+		<li><%= result.login %></li>
+	<%  }); %>
+        </div>
       </div>
     </div>
+
+    <% include partials/style %>
   </body>
 </html>

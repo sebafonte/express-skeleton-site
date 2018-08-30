@@ -9,6 +9,9 @@ const logger = require('morgan');
 const app = express();
 const sitePort = 80;
 
+// Init database
+var userSchema, User, postulantSchema, Entity;
+const db = mongoose.createConnection('mongodb://localhost/rhdb');
 
 function initializeDatabase() {	
     userSchema = mongoose.Schema({
@@ -18,6 +21,16 @@ function initializeDatabase() {
     });
 
     User = db.model('users', userSchema);	
+
+    postulantSchema = mongoose.Schema({
+        name: { type: String, trim: true, index: true },
+        tel: { type: String, trim: true },
+        data: String,
+	tags: { type: String, trim: true },
+	comment: { type: String, trim: true }
+    });
+
+    Entity = db.model('entities', postulantSchema);
 }
 
 function printBDError (err, result) {
@@ -25,33 +38,29 @@ function printBDError (err, result) {
       console.log(result);
 }
 
-// Init database
-var userSchema, User;
-const db = mongoose.createConnection('mongodb://localhost/rhdb');
-
 // Init system
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 app.use(cookieParser());
 app.set('view engine', 'ejs')
-app.use(session({ secret: '2C44-4D44-WppQ38S', resave: true, saveUninitialized: true }));
+app.use(session({ secret: '9C54-4D44-WpRQ38S', resave: true, saveUninitialized: true }));
 
 
 initializeDatabase();
 
 
-// Authentication and Authorization Middleware
+// Authentication and authorization middleware
 const auth = function(req, res, next) {
-  if (req.session && req.session.user && req.session.admin)  
+  if (req.session && req.session.username && req.session.admin)  
     return next();
   else
     return res.redirect("/index")
 };
 
 // Static content
-app.use(express.static('/public/images'));
-app.use(express.static('/public/css'));
+app.use(express.static('public/images'));
+app.use(express.static('public/css'));
 app.use(express.static('public'));
 	
 // Index pages
@@ -64,9 +73,9 @@ app.get('/index', function (req, res) {
   req.session.errorMessage = "";
 
   if (req.session.username)
-    res.render('home', { errorMessage: message });
+    res.render('home', { message: message });
   else
-    res.render('index', { errorMessage: message });
+    res.render('index', { message: message });
 })
 
 // Login
@@ -78,8 +87,8 @@ app.post('/login', function (req, res) {
     // Select user
     User.find( 
       { login: req.body.username }, 
-      function(err, entities) {
-        var result = entities[0];
+      function(err, users) {
+        var result = users[0];
         if (result != null && (req.body.password == result.password)) {
           req.session.username = req.body.username;
           req.session.admin = true;
@@ -107,12 +116,43 @@ app.route('/logout')
 
 // Main functionality
 app.get('/entities', auth, function (req, res) {
-  res.render('entities', { entities: [ 1, 2, 3 ] });
-  return;
+    Entity.find( 
+      { }, 
+      function(err, entities) {
+        if (err == null) {
+	  res.render('entities', { entities: entities });
+        }
+        else {
+          res.render('error', { message: "Can't get data from database." });
+        }
+      });
 });
 
 app.get('/users', auth, function (req, res) {
-  res.render('users', { users: [ 1, 2, 3 ] });
+    User.find( 
+      { }, 
+      function(err, entities) {
+        if (err == null) {
+	  res.render('users', { users: entities });
+        }
+        else {
+          res.render('error', { message: "Can't get data from database." });
+        }
+      });
+});
+
+app.get('/getEntityData', auth, function (req, res) {
+    Entity.find( 
+      { login: req.body.entityId }, 
+      function(err, entities) {
+        var result = entities[0];
+        if (result != null) {
+          res.sendFile(result);
+        }
+        else {
+	// #TODO: Check correct behavior here	
+        }
+      });
 });
 
 
