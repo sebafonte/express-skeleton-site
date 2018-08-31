@@ -1,0 +1,29 @@
+
+div.centre
+{
+  width: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ui-menu:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.navbar .nav>li>a {
+  color: white;
+}
+
+.navbar .nav>li>a:hover {
+  color: #847D98;
+}
+
+p {
+  color: white;
+}

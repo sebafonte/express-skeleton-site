@@ -1,42 +1,14 @@
-
+// Dependencies
 const express = require('express')
 const session = require('express-session');
 const querystring = require('querystring');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const app = express();
 const sitePort = 80;
-
-// Init database
-var userSchema, User, postulantSchema, Entity;
-const db = mongoose.createConnection('mongodb://localhost/rhdb');
-
-function initializeDatabase() {	
-    userSchema = mongoose.Schema({
-        login: { type: String, trim: true, index: true },
-        password: String,
-        locked: Boolean
-    });
-
-    User = db.model('users', userSchema);	
-
-    postulantSchema = mongoose.Schema({
-        name: { type: String, trim: true, index: true },
-        tel: { type: String, trim: true },
-        data: String,
-	tags: { type: String, trim: true },
-	comment: { type: String, trim: true }
-    });
-
-    Entity = db.model('entities', postulantSchema);
-}
-
-function printBDError (err, result) {
-      if (err) throw err;
-      console.log(result);
-}
+// Modules
+const db = require('./db');
 
 // Init system
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,7 +19,7 @@ app.set('view engine', 'ejs')
 app.use(session({ secret: '9C54-4D44-WpRQ38S', resave: true, saveUninitialized: true }));
 
 
-initializeDatabase();
+db.initializeDatabase();
 
 
 // Authentication and authorization middleware
@@ -66,7 +38,7 @@ app.use(express.static('public'));
 // Index pages
 app.get('/', function (req, res) {
   res.redirect("/index");
-})
+});
 
 app.get('/index', function (req, res) {
   const message = req.session.errorMessage;
@@ -76,7 +48,8 @@ app.get('/index', function (req, res) {
     res.render('home', { message: message });
   else
     res.render('index', { message: message });
-})
+});
+
 
 // Login
 app.post('/login', function (req, res) {
@@ -85,9 +58,9 @@ app.post('/login', function (req, res) {
     res.send('login failed');
   else
     // Select user
-    User.find( 
-      { login: req.body.username }, 
-      function(err, users) {
+    db.findUsers(
+	{ login: req.body.username },
+	function(err, users) {
         var result = users[0];
         if (result != null && (req.body.password == result.password)) {
           req.session.username = req.body.username;
@@ -100,7 +73,7 @@ app.post('/login', function (req, res) {
         }
         
 	res.redirect("/index");
-      }); 
+      });
 });
 
 // Logout
@@ -116,7 +89,7 @@ app.route('/logout')
 
 // Main functionality
 app.get('/entities', auth, function (req, res) {
-    Entity.find( 
+    db.findEntities( 
       { }, 
       function(err, entities) {
         if (err == null) {
@@ -129,24 +102,26 @@ app.get('/entities', auth, function (req, res) {
 });
 
 app.get('/users', auth, function (req, res) {
-    User.find( 
+    db.findUsers( 
       { }, 
       function(err, entities) {
-        if (err == null) {
+        if (err == null)
 	  res.render('users', { users: entities });
-        }
-        else {
+        else
           res.render('error', { message: "Can't get data from database." });
-        }
       });
 });
 
 app.get('/getEntityData', auth, function (req, res) {
-    Entity.find( 
+    db.findEntities( 
       { login: req.body.entityId }, 
       function(err, entities) {
         var result = entities[0];
         if (result != null) {
+          // Disable caching for content files
+          res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+          res.header("Pragma", "no-cache");
+          res.header("Expires", 0);
           res.sendFile(result);
         }
         else {

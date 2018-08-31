@@ -3,23 +3,24 @@
   <head><% include partials/header %></head>
   <body>
     <div class="container">
-    <div class="container">
-      <div style="display: inline-grid">
-	<img src="images/cfologo.png" style="margin-left: 50%;" alt="CFO Tech logo">
-      </div>
-      <fieldset>
-        <form action="/login" method="post" enctype='application/json'>
-	<div style="display: inline-grid">
-          <input name="username" type="text" class="ghost-input" placeholder="User" required>
-          <input name="password" type="password" class="ghost-input" placeholder="Password" required>
-	  <div style="margin-top: 20px"/>
-	  <input type="submit" class="ghost-button" value="Login">
-	</div>
-	<%= message %>
+      <div>
+        <div style="display: inline-grid">
+	  <img src="images/cfologo.png" style="" alt="CFO Tech logo">
+        </div>
+        <fieldset>
+          <form action="/login" method="post" enctype='application/json'>
+	  <div style="display: inline-grid">
+            <input name="username" type="text" class="ghost-input" placeholder="User" required>
+            <input name="password" type="password" class="ghost-input" placeholder="Password" required>
+	    <div style="margin-top: 20px"/>
+	    <input class="ghost-button" value="Login" style="width: 100%;" type="submit">
+	  </div>
+	  <div style="margin-top: 20px">
+	  <%= message %>
+	  </div>
         </form>
       </fieldset>
+      <div>
     </div>
-    </div>
-    <% include partials/style %>
   </body>
 </html>

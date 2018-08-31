@@ -19,6 +19,17 @@ function initializeRoot() {
   value.save(printBDError);
 }
 
+function initializeSampleData() {	
+  const userSchema = mongoose.Schema({
+    login: { type: String, trim: true, index: true },
+    password: String,
+    locked: Boolean
+  });
+
+  const User = db.model('users', userSchema);	
+  const value = new User({ login: "admin", password: "pepe", locked: false });
+  value.save(printBDError);
+}
 
 initializeRoot();
 

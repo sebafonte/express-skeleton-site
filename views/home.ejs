@@ -3,10 +3,12 @@
   <head><% include partials/header %></head>
   <body>
     <div class="container">
-	<% include partials/menu %>
-	<br/><br/><br/><br/><br/>
-	<div><%= message %></div>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: indigo; ">
+        <div class="container">
+        <% include partials/menu %>
+        </div>
+      </div>
+      <div style="margin-top: 100px"><%= message %></div>
     </div>
-    <% include partials/style %>
   </body>
 </html>

@@ -3,20 +3,18 @@
   <head><% include partials/header %></head>
   <body>
     <div class="container">
-      <% include partials/menu %>
-      <br/><br/><br/><br/><br/>
-      <div style="display: inline-grid; width: 50%">
-      	<h4>Users</h4>
-	<button type="button" class="btn btn-primary" style="width: 100px" >Add new</button>
-
- 	<div style="display: inline-grid; margin-top: 25px">
-	<% users.forEach(function(result) { %>
-		<li><%= result.login %></li>
-	<%  }); %>
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: indigo; ">
+        <div class="container">
+        <% include partials/menu %>
         </div>
       </div>
+      <div style="margin-top: 60px;">
+      	<button type="button" class="btn btn-primary" style="width: 100px" >Add new</button>
+      </div>
+      <div style="display: inline-grid; margin-top: 25px">
+	<% include partials/item-user %>
+      </div>
     </div>
-
-    <% include partials/style %>
   </body>
 </html>
+
