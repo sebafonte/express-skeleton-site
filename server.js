@@ -130,7 +130,6 @@ app.get('/getEntityData', auth, function (req, res) {
       });
 });
 
-
 // Application start
 app.listen(sitePort, function () {
   console.log('Example app listening on port ' + sitePort.toString() + '!')

@@ -1,5 +1,5 @@
 // Init database
-var userSchema, User, postulantSchema, Entity;
+var userSchema, User, entitySchema, Entity;
 const mongoose = require('mongoose');
 const db = mongoose.createConnection('mongodb://localhost/rhdb');
 
@@ -18,7 +18,7 @@ function initializeDatabase() {
 
     User = db.model('users', userSchema);	
 
-    postulantSchema = mongoose.Schema({
+    entitySchema = mongoose.Schema({
         name: { type: String, trim: true, index: true },
         tel: { type: String, trim: true },
         data: String,
@@ -26,7 +26,7 @@ function initializeDatabase() {
 	comment: { type: String, trim: true }
     });
 
-    Entity = db.model('entities', postulantSchema);
+    Entity = db.model('entities', entitySchema);
 }
 
 function printBDError (err, result) {
